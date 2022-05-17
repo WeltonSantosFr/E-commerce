@@ -1,4 +1,8 @@
+// Inicializa a pagina lendo todos os itens
+
 itemsReader(data)
+
+// Funções de leitura de itens com base em suas categorias
 
 function itemsReader(data) {
 
@@ -27,7 +31,6 @@ function itemsReader(data) {
         newItem.append(itemImg, itemDiv, itemName, itemDesc, itemPrice, addCart)
         ul.appendChild(newItem)
     }
-
 }
 
 
@@ -142,6 +145,161 @@ function camisetasReader(data) {
     }
 }
 
+function totalValue() {
+    const buyCartDiv = document.querySelector(".buy-cart-div")
+
+    const cartUl = document.querySelector("#cart-ul")
+
+    const filho = cartUl.children[0]
+
+    let somaValor = filho.children[1].children[1].innerText.split(" ")
+    let realValor = parseInt(somaValor[1])
+
+
+
+
+    if (buyCartDiv.children.length === 2) {
+        const total = document.createElement("div")
+        total.className = "total-div"
+        const qtdDiv = document.createElement("div")
+        qtdDiv.className = "qtd-div"
+        const valorDiv = document.createElement("div")
+        valorDiv.className = "valor-div"
+        const quantidade = document.createElement("p")
+        quantidade.innerText = "Quantidade:"
+        const quantidadeValor = document.createElement("p")
+        quantidadeValor.innerText = cartUl.children.length
+        const totalmensagem = document.createElement("p")
+        totalmensagem.innerText = "Total:"
+        const totalValor = document.createElement("P")
+        totalValor.innerText = `R$ ${realValor}`
+        qtdDiv.append(quantidade, quantidadeValor)
+        valorDiv.append(totalmensagem, totalValor)
+        total.append(qtdDiv, valorDiv)
+        buyCartDiv.appendChild(total)
+    }
+}
+let valorAtual = 0
+
+function totalValueAdd(e) {
+
+
+    const cartUl = document.querySelector("#cart-ul")
+    const qtd = document.querySelector(".qtd-div").children[1]
+    qtd.innerText = cartUl.children.length
+
+    const valor = e.target.parentNode.children[4].innerText
+
+    let valorSplit = valor.split(" ")
+    let valorNum = parseInt(valorSplit[1])
+
+    const valorP = document.querySelector(".valor-div").children[1]
+    valorP.innerText = `R$ ${valorAtual += valorNum}`
+
+
+}
+
+function removeTotalValue(e) {
+    const cartUl = document.querySelector("#cart-ul")
+    const buyCartDiv = document.querySelector(".buy-cart-div")
+    const totalDiv = document.querySelector(".total-div")
+    const buyCartListDiv = document.querySelector(".buy-cart-list-div")
+
+    if (cartUl.children.length === 0) {
+
+        const valorP = document.querySelector(".valor-div").children[1]
+        let valor = 0
+        valorP.innerText = `R$ ${valor}`
+
+        buyCartDiv.removeChild(totalDiv)
+        cartUl.className = "cart-ul-off"
+
+        const emptyCartTitle = document.createElement("p")
+        emptyCartTitle.className = "empty-cart-title"
+        emptyCartTitle.innerText = "Carrinho vázio"
+
+        const emptyCartDesc = document.createElement("p")
+        emptyCartDesc.innerText = "adicione itens"
+        emptyCartDesc.className = "empty-cart-desc"
+
+        buyCartListDiv.append(emptyCartTitle, emptyCartDesc)
+
+    }
+    const qtd = document.querySelector(".qtd-div").children[1]
+    qtd.innerText = cartUl.children.length
+
+    
+    
+    const valor = e.target.parentNode.parentNode.children[1].children[1].innerText
+
+    let valorSplit = valor.split(" ")
+    let valorNum = parseInt(valorSplit[1])
+    
+    const valorTotal = document.querySelector(".valor-div").children[1].innerText
+    let valorTotalSplit = valorTotal.split(" ")
+    let valorTotalNum = parseInt(valorTotalSplit[1])
+
+    const valorP = document.querySelector(".valor-div").children[1]
+    valorP.innerText = `R$ ${valorTotalNum - valorNum}`
+}
+
+// Funções de troca de classe da Div "Carrinho de compras", limpeza da ul do carrinho, e adição de novos itens
+
+function classChanger() {
+
+    const cartUl = document.querySelector("#cart-ul")
+    if (cartUl.className === "cart-ul-off") {
+        cartUl.className = "cart-ul-on"
+    }
+}
+
+function cartCleaner() {
+    const cartDiv = document.querySelector(".buy-cart-list-div")
+
+    if (cartDiv.children.length > 1) {
+        const emptyCartTitle = document.querySelector(".empty-cart-title")
+        cartDiv.removeChild(emptyCartTitle)
+
+        const emptyCartDesc = document.querySelector(".empty-cart-desc")
+        cartDiv.removeChild(emptyCartDesc)
+    }
+}
+
+function cartCardCreator(pai) {
+
+    const cartUl = document.querySelector(".cart-ul-on")
+
+    const cartCard = document.createElement("li")
+    cartCard.className = "cart-card"
+
+    const cartCardImg = document.createElement("img")
+    cartCardImg.src = pai.children[0].src
+    cartCardImg.className = "cart-card-img"
+
+    const cartCardInfo = document.createElement("div")
+    cartCardInfo.className = "cart-card-info"
+
+    const cartCardName = document.createElement("h3")
+    cartCardName.innerText = pai.children[2].innerText
+    cartCardName.className = "cart-card-name"
+
+    const cartCardPrice = document.createElement("p")
+    cartCardPrice.innerText = pai.children[4].innerText
+    cartCardPrice.className = "cart-card-price"
+
+    const cartCardRemove = document.createElement("a")
+    cartCardRemove.innerText = "Remover produto"
+    cartCardRemove.id = "cart-remove"
+    cartCardRemove.className = "cart-card-remove"
+
+    cartCardInfo.append(cartCardName, cartCardPrice, cartCardRemove)
+    cartCard.append(cartCardImg, cartCardInfo)
+    cartUl.appendChild(cartCard)
+}
+
+
+// Sessão dos EventListeners
+
 const todos = document.querySelector(".all-items")
 
 todos.addEventListener("click", (e) => {
@@ -182,77 +340,33 @@ camisetas.addEventListener("click", (e) => {
 const addCart = document.querySelectorAll("#add-cart")
 
 
-addCart.forEach(addEventListener("click", (e) => {
+addCart.forEach((element) => element.addEventListener("click", (e) => {
+
     e.preventDefault()
     const pai = e.target.parentNode
-    
+
     classChanger()
 
     cartCleaner()
 
     cartCardCreator(pai)
-    
+
+    totalValue()
+
+    totalValueAdd(e)
+
 }))
 
-function classChanger() {
+const removeCard = document.querySelectorAll("#cart-ul")
 
-    
+removeCard.forEach((element) => element.addEventListener("click", (e) => {
+
     const cartUl = document.querySelector("#cart-ul")
-    if(cartUl.className === "cart-ul-off") {
-        cartUl.className = "cart-ul-on"
-    }
-}
 
-function cartCleaner() {
-    const cartDiv = document.querySelector(".buy-cart-list-div")
-    
-    
-    if(cartDiv.children.length > 1) {
-        const emptyCartTitle = document.querySelector(".empty-cart-title")
-        cartDiv.removeChild(emptyCartTitle)
-        
-        const emptyCartDesc = document.querySelector(".empty-cart-desc")
-        cartDiv.removeChild(emptyCartDesc)
-    }
-}
+    const pai = e.target.parentNode.parentNode
 
-function cartCardCreator(pai) {
+    cartUl.removeChild(pai)
 
-    const cartUl = document.querySelector(".cart-ul-on")
+    removeTotalValue(e)
 
-    const cartCard = document.createElement("li")
-    cartCard.className = "cart-card"
-
-    const cartCardImg = document.createElement("img")
-    cartCardImg.src = pai.children[0].src
-    cartCardImg.className = "cart-card-img"
-
-    const cartCardInfo = document.createElement("div")
-    cartCardInfo.className = "cart-card-info"
-
-    const cartCardName = document.createElement("h3")
-    cartCardName.innerText = pai.children[2].innerText
-    cartCardName.className = "cart-card-name"
-
-    const cartCardPrice = document.createElement("p")
-    cartCardPrice.innerText = pai.children[4].innerText
-    cartCardPrice.className = "cart-card-price"
-
-    const cartCardRemove = document.createElement("a")
-    cartCardRemove.innerText = "Remover produto"
-    cartCardRemove.className = "cart-card-remove"
-
-    cartCardInfo.append(cartCardName, cartCardPrice, cartCardRemove)
-    cartCard.append(cartCardImg , cartCardInfo)
-    cartUl.appendChild(cartCard)
-
-    return cartUl
-}
-
-const removeCard = document.querySelectorAll(".cart-card-remove")
-
-console.log(removeCard)
-
-function cartCardRemover() {
-
-}
+}))

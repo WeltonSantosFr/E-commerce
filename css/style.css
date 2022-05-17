@@ -283,6 +283,7 @@ body {
 .cart-ul-on {
     width: 100%;
     height: 100%;
+    overflow: scroll;
 }
 
 .cart-card {
@@ -328,4 +329,32 @@ body {
 }
 .cart-card-remove:hover {
     cursor: pointer;
+}
+
+.total-div {
+    background-color: #000;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    width: 300px;
+    height: 100px;
+}
+
+.qtd-div {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 90%;
+    margin-left: 15px;
+}
+
+.valor-div {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 90%;
+    margin-left: 15px;
 }
