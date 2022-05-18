@@ -205,7 +205,11 @@ function removeTotalValue(e) {
     const totalDiv = document.querySelector(".total-div")
     const buyCartListDiv = document.querySelector(".buy-cart-list-div")
 
+    
+
     if (cartUl.children.length === 0) {
+        const qtd = document.querySelector(".qtd-div").children[1]
+        qtd.innerText = cartUl.children.length
 
         const valorP = document.querySelector(".valor-div").children[1]
         let valor = 0
@@ -224,23 +228,24 @@ function removeTotalValue(e) {
 
         buyCartListDiv.append(emptyCartTitle, emptyCartDesc)
 
+
+        valorAtual = 0
     }
+
+    
     const qtd = document.querySelector(".qtd-div").children[1]
     qtd.innerText = cartUl.children.length
 
-    
+    console.log(valorAtual)
     
     const valor = e.target.parentNode.parentNode.children[1].children[1].innerText
 
     let valorSplit = valor.split(" ")
     let valorNum = parseInt(valorSplit[1])
-    
-    const valorTotal = document.querySelector(".valor-div").children[1].innerText
-    let valorTotalSplit = valorTotal.split(" ")
-    let valorTotalNum = parseInt(valorTotalSplit[1])
 
     const valorP = document.querySelector(".valor-div").children[1]
-    valorP.innerText = `R$ ${valorTotalNum - valorNum}`
+    valorP.innerText = `R$ ${valorAtual -= valorNum}`
+
 }
 
 // Funções de troca de classe da Div "Carrinho de compras", limpeza da ul do carrinho, e adição de novos itens
